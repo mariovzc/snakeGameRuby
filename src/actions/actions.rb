@@ -2,7 +2,7 @@ module Actions
   def self.move_snake(state)
     next_direction = state.next_direction
     next_position = calc_next_position(state)
-    #Verificar que la siguiente casilla sea valida
+    # verificar que la siguiente cassilla sea valida
     if position_is_valid?(state, next_position)
       move_snake_to(state, next_position)
     else
@@ -11,7 +11,7 @@ module Actions
   end
 
   private
-
+  
   def self.calc_next_position(state)
     curr_position = state.snake.positions.first
     case state.next_direction
@@ -39,19 +39,19 @@ module Actions
   end
 
   def self.position_is_valid?(state, position)
-    # verificar que este en la grilla
-    invalid = ((position.row >= state.grid.rows ||
-        position.row < 0) ||
-        (position.col >= state.grid.cols ||
-        position.col < 0))
-
-    return false if invalid
-    # verificar que no se superponga con la serpiente
+    # verificar q este en la grilla
+    is_invalid = ((position.row >= state.grid.rows ||
+      position.row < 0) || 
+      (position.col >= state.grid.cols ||
+      position.col < 0))
+    return false if is_invalid
+    # verificar q no este superponiendo a la serpiente
     return !(state.snake.positions.include? position)
   end
 
   def self.move_snake_to(state, next_position)
-    state.snake.positions = [next_position] + state.snake.positions[0...-1]
+    new_positions = [next_position] + state.snake.positions[0...-1]
+    state.snake.positions = new_positions
     state
   end
 
