@@ -8,58 +8,55 @@ module Actions
     else
       end_game(state)
     end
+  end
 
-    private
-    def calc_next_position(state)
-      curr_positions = state.snake.positions.first
-      case state.next_direction
-      when UP
-        # decrementar fila
-        return Model::Coord.new(
-          curr_positions.row - 1,
-          curr_positions.col
-        )
-      when RIGHT
-        # incrementar columna
-        return Model::Coord.new(
-          curr_positions.row,
-          curr_positions.col + 1
-        )
-      when DOWN
-        # incrementar la fila
-        return Model::Coord.new(
-          curr_positions.row + 1,
-          curr_positions.col
-        )
-      when LEFT
-        # decrementar la columna
-        return Model::Coord.new(
-          curr_positions.row,
-          curr_positions.col - 1
-        )
-      end
+  private
+
+  def self.calc_next_position(state)
+    curr_position = state.snake.positions.first
+    case state.next_direction
+    when Model::Direction::UP
+      # decrementar fila
+      return Model::Coord.new(
+          curr_position.row - 1, 
+          curr_position.col)
+    when Model::Direction::RIGHT
+      # incrementar col
+      return Model::Coord.new(
+          curr_position.row, 
+          curr_position.col + 1)
+    when Model::Direction::DOWN
+      # incrementar fila
+      return Model::Coord.new(
+          curr_position.row + 1,
+          curr_position.col)
+    when Model::Direction::LEFT
+      # decrementar col
+      return Model::Coord.new(
+          curr_position.row, 
+          curr_position.col - 1)
     end
+  end
 
-    def position_is_valid?(state, position)
-      # verificar que este en la grilla
-      invalid? = ((position.row >= state.grid.rows ||
-         position.row < 0) ||
-         (position.col >= state.grid.cols ||
-          position.col < 0))
+  def self.position_is_valid?(state, position)
+    # verificar que este en la grilla
+    invalid = ((position.row >= state.grid.rows ||
+        position.row < 0) ||
+        (position.col >= state.grid.cols ||
+        position.col < 0))
 
-      return false if invalid?
-      # verificar que no se superponga con la serpiente
-      return !(state.snake.position.include? position)
-    end
+    return false if invalid
+    # verificar que no se superponga con la serpiente
+    return !(state.snake.positions.include? position)
+  end
 
-    def move_snake_to(state, next_position)
-      state.snake.positions = [next_position] + state.snake.positions[0...-1]
-      state
-    end
+  def self.move_snake_to(state, next_position)
+    state.snake.positions = [next_position] + state.snake.positions[0...-1]
+    state
+  end
 
-    def end_game(state)
-      state.game_finished = true
-      state
-    end
+  def self.end_game(state)
+    state.game_finished = true
+    state
   end
 end
